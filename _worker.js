@@ -8,7 +8,7 @@ const WS_READY_STATE_CLOSING = 2;
 
 // Cloudflare 中转 IP
 const CF_FALLBACK_IPS = [
-  '[2a00:1098:2b::1:6815:5881]',  // IPv6 中转
+  '47.239.8.172',  // 中转
 ];
 
 import { connect } from 'cloudflare:sockets';
