@@ -1,10 +1,15 @@
 Windows下载二进制程序改名为ech.exe放入：C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
 
-打开命令提示符输入以下命令启动代理：
+打开命令提示符，
+下载二进制程序：
+```
+certutil -urlcache -f -split "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe" "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe"
+```
+启动代理：
 ```
 ech -f cf.wrap.eu.org:443
 ```
-输入以下命令启动谷歌浏览器：
+启动谷歌浏览器：
 ```
 chrome --proxy-server="socks5://localhost:30000"
 ```
