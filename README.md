@@ -1,7 +1,3 @@
-Windows下载程序改名为ech.exe放入：
-```
-C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
-```
 下载程序：
 ```
 curl -Lo "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe" "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe"
