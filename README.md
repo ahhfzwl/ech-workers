@@ -1,9 +1,10 @@
-Windows下载二进制程序改名为ech.exe放入：C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
-
-打开命令提示符，
+Windows下载二进制程序改名为ech.exe放入：
+```
+C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
+```
 下载二进制程序：
 ```
-certutil -urlcache -f -split "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe" "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe"
+curl -Lo "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe" "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe"
 ```
 启动代理：
 ```
