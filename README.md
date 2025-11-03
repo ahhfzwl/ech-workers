@@ -14,7 +14,10 @@ powershell -Command "Start-Process \"ech.exe\" -ArgumentList \"-f cf.wrap.eu.org
 ```
 chrome --proxy-server="socks5://localhost:30000"
 ```
-
+杀死进程：
+```
+taskkill /f /im ech.exe
+```
 Linux下载二进制程序改名为ech放入：/usr/local/bin/
 ```
 ech -l 0.0.0.0:30000 -f ech-tunnel.pages.dev:443 -ip 23.227.38.32
