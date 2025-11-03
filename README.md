@@ -9,6 +9,10 @@ certutil -urlcache -f -split "https://gh.registry.cyou/ahhfzwl/EchWorker/release
 ```
 ech -f cf.wrap.eu.org:443
 ```
+后台启动：
+```
+powershell -Command "Start-Process \"ech.exe\" -ArgumentList \"-f cf.wrap.eu.org:443\" -WindowStyle Hidden"
+```
 启动谷歌浏览器：
 ```
 chrome --proxy-server="socks5://localhost:30000"
