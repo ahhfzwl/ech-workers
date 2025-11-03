@@ -1,8 +1,8 @@
-Windows下载二进制程序改名为ech.exe放入：
+Windows下载程序改名为ech.exe放入：
 ```
 C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
 ```
-下载二进制程序：
+下载程序：
 ```
 curl -Lo "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe" "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe"
 ```
@@ -14,7 +14,7 @@ ech -f cf.wrap.eu.org:443
 ```
 powershell -Command "Start-Process \"ech.exe\" -ArgumentList \"-f cf.wrap.eu.org:443\" -WindowStyle Hidden"
 ```
-启动谷歌浏览器：
+启动Chrome：
 ```
 chrome --proxy-server="socks5://localhost:30000"
 ```
