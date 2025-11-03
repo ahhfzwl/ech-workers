@@ -1,6 +1,6 @@
 Windows下载二进制程序改名为ech.exe放入：C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\
 
-打开命令提示符并输入以下命令启动代理：
+打开命令提示符输入以下命令启动代理：
 ```
 ech -f cf.wrap.eu.org:443
 ```
@@ -8,7 +8,6 @@ ech -f cf.wrap.eu.org:443
 ```
 chrome --proxy-server="socks5://localhost:30000"
 ```
-
 
 Linux下载二进制程序改名为ech放入：/usr/local/bin/
 ```
