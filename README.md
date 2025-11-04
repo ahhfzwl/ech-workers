@@ -1,6 +1,6 @@
 下载程序：
 ```
-curl -Lo "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe" "https://gh.registry.cyou/ahhfzwl/EchWorker/releases/download/1/ech-workers-windows-amd64.exe"
+curl -Lo "C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\ech.exe" "https://gh.registry.cyou/ahhfzwl/ech-workers/releases/download/1/ech-workers-windows-amd64.exe"
 ```
 启动代理：
 ```
