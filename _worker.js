@@ -1,9 +1,6 @@
 const WS_READY_STATE_OPEN = 1;
-const WS_READY_STATE_CLOSING = 2;
-// 🚀 优化点 1: 允许回退 IP 包含端口
 const CF_FALLBACK_IPS = ['210.61.97.241:81']; 
 
-// 复用 TextEncoder，避免重复创建
 const encoder = new TextEncoder();
 
 import { connect } from 'cloudflare:sockets';
@@ -80,7 +77,6 @@ async function handleSession(webSocket) {
     };
 
     const parseAddress = (addr) => {
-        // 兼容 IPv6 [host]:port 格式
         if (addr[0] === '[') {
             const end = addr.indexOf(']');
             return {
@@ -88,16 +84,9 @@ async function handleSession(webSocket) {
                 port: parseInt(addr.substring(end + 2), 10)
             };
         }
-        // 处理 IPv4 host:port 格式
         const sep = addr.lastIndexOf(':');
-        // 确保找到了端口分隔符
         if (sep === -1 || sep === addr.length - 1) {
-            // 如果没有找到端口，或者端口为空，返回默认 443 或 80，这里暂时不设置默认端口，只返回解析到的部分
-            // 实际上对于 CF_FALLBACK_IPS 应该强制要求带端口，但为了健壮性，这里让 host 为完整地址
-             return {
-                host: addr,
-                port: 443 // 假设默认端口，或者根据实际情况处理
-            };
+             return { host: addr, port: 443 };
         }
         return {
             host: addr.substring(0, sep),
@@ -114,34 +103,25 @@ async function handleSession(webSocket) {
 
     const connectToRemote = async (targetAddr, firstFrameData) => {
         const { host: targetHost, port: targetPort } = parseAddress(targetAddr);
-        // 🚀 优化点 2: 回退尝试的地址现在是包含端口的完整地址字符串
         const attempts = [null, ...CF_FALLBACK_IPS];
 
         for (let i = 0; i < attempts.length; i++) {
             let connHost = targetHost;
             let connPort = targetPort;
-            let useFallback = false;
 
-            if (i > 0 && attempts[i]) {
-                // 使用回退 IP 时，解析其 host 和 port
-                const { host: fallbackHost, port: fallbackPort } = parseAddress(attempts[i]);
+            if (i > 0) {
+                const fallbackAddr = attempts[i];
+                const { host: fallbackHost, port: fallbackPort } = parseAddress(fallbackAddr);
                 connHost = fallbackHost;
-                connPort = fallbackPort;
-                useFallback = true;
+                connPort = fallbackPort || targetPort; 
             }
             
-            // 如果回退 IP 没有端口，则使用目标地址的端口
-            if (useFallback && !connPort) {
-                connPort = targetPort;
-            } else if (!connPort) {
-                // 如果目标地址都没有端口，连接失败（实际场景中 targetAddr 应该包含端口）
-                throw new Error('Target address must include port.');
-            }
+            if (!connPort) throw new Error('Target address must include port.');
 
             try {
                 remoteSocket = connect({
-                    hostname: connHost, // 使用解析出的 host
-                    port: connPort      // 使用解析出的 port
+                    hostname: connHost,
+                    port: connPort      
                 });
 
                 if (remoteSocket.opened) await remoteSocket.opened;
@@ -149,7 +129,6 @@ async function handleSession(webSocket) {
                 remoteWriter = remoteSocket.writable.getWriter();
                 remoteReader = remoteSocket.readable.getReader();
 
-                // 发送首帧数据
                 if (firstFrameData) {
                     await remoteWriter.write(encoder.encode(firstFrameData));
                 }
@@ -159,13 +138,11 @@ async function handleSession(webSocket) {
                 return;
 
             } catch (err) {
-                // 清理失败的连接
                 try { remoteWriter?.releaseLock(); } catch {}
                 try { remoteReader?.releaseLock(); } catch {}
                 try { remoteSocket?.close(); } catch {}
                 remoteWriter = remoteReader = remoteSocket = null;
 
-                // 如果不是 CF 错误或已是最后尝试，抛出错误
                 if (!isCFError(err) || i === attempts.length - 1) {
                     throw err;
                 }
@@ -182,7 +159,6 @@ async function handleSession(webSocket) {
             if (typeof data === 'string') {
                 if (data.startsWith('CONNECT:')) {
                     const sep = data.indexOf('|', 8);
-                    // CONNECT:host:port|...
                     await connectToRemote(
                         data.substring(8, sep),
                         data.substring(sep + 1)
@@ -212,8 +188,7 @@ async function handleSession(webSocket) {
 
 function safeCloseWebSocket(ws) {
     try {
-        if (ws.readyState === WS_READY_STATE_OPEN || 
-            ws.readyState === WS_READY_STATE_CLOSING) {
+        if (ws.readyState === WS_READY_STATE_OPEN) { 
             ws.close(1000, 'Server closed');
         }
     } catch {}
